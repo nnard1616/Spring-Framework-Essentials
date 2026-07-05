@@ -2,7 +2,9 @@ package config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import rewards.RewardNetwork;
 import rewards.internal.RewardNetworkImpl;
 import rewards.internal.account.AccountRepository;
@@ -21,16 +23,17 @@ import javax.sql.DataSource;
  * - Save all changes, Re-run the RewardNetworkTests.  It should now pass.
  */
 @Configuration
+@ComponentScan("rewards.internal")
 public class RewardsConfig {
 
 	DataSource dataSource;
 
-	@Autowired
+
 	public RewardsConfig(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 		
-	@Bean
+
 	public RewardNetwork rewardNetwork(){
 		return new RewardNetworkImpl(
 			accountRepository(), 
@@ -38,20 +41,19 @@ public class RewardsConfig {
 			rewardRepository());
 	}
 	
-	@Bean
+
 	public AccountRepository accountRepository(){
 		JdbcAccountRepository repository = new JdbcAccountRepository();
 		repository.setDataSource(dataSource);
 		return repository;
 	}
 	
-	@Bean
 	public RestaurantRepository restaurantRepository(){
 		JdbcRestaurantRepository repository = new JdbcRestaurantRepository(dataSource);
 		return repository;
 	}
 	
-	@Bean
+
 	public RewardRepository rewardRepository(){
 		JdbcRewardRepository repository = new JdbcRewardRepository();
 		repository.setDataSource(dataSource);
@@ -61,5 +63,6 @@ public class RewardsConfig {
 	// TODO-02: Remove all of the @Bean methods above.
 	// - Remove the code that autowires DataSource as well.
     // - Run the RewardNetworkTests test. It should fail. Why?
+	// Nathan: It fails because Spring cannot do dependency injection without @Bean methods.
 	
 }
