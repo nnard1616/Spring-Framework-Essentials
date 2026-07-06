@@ -28,6 +28,8 @@ public class LoggingAspectTests {
 			// AOP VERIFICATION
 			// LoggingAspect should have output an INFO message to console
 			String consoleOutput = capture.toString();
+			System.out.println("FUCK");
+			System.out.println("SHIT: " +consoleOutput);
 			assertTrue(consoleOutput.startsWith("INFO"));
 			assertTrue(consoleOutput.contains("rewards.internal.aspects.LoggingAspect"));
 		}
